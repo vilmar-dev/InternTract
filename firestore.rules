@@ -1,0 +1,69 @@
+rules_version = '2';
+
+// ============================================================
+// Firestore Security Rules for InternTrack
+// Paste into: Firebase Console > Firestore Database > Rules
+// ============================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function myUserDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isApprovedAdmin() {
+      return isSignedIn()
+        && myUserDoc().data.role == 'admin'
+        && myUserDoc().data.status == 'approved';
+    }
+
+    function isApprovedIntern() {
+      return isSignedIn()
+        && myUserDoc().data.role == 'intern'
+        && myUserDoc().data.status == 'approved';
+    }
+
+    // ---------------- users ----------------
+    match /users/{userId} {
+      // Anyone signed in can create their own account doc during registration
+      allow create: if isSignedIn() && request.auth.uid == userId;
+
+      // A user can read/update their own doc; approved admins can read/update anyone's
+      allow read: if isSignedIn() && (request.auth.uid == userId || isApprovedAdmin());
+      allow update: if isSignedIn() && (request.auth.uid == userId || isApprovedAdmin());
+
+      // Only approved admins can delete accounts
+      allow delete: if isApprovedAdmin();
+    }
+
+    // ---------------- attendance ----------------
+    match /attendance/{recordId} {
+      // Interns can create/update only their own attendance records
+      allow create: if isApprovedIntern() && request.resource.data.userId == request.auth.uid;
+      allow update: if isApprovedIntern() && resource.data.userId == request.auth.uid;
+
+      // Any approved user (intern or admin) can read all attendance records —
+      // interns need this to view everyone's daily time in/out, not just their own
+      allow read: if isApprovedIntern() || isApprovedAdmin();
+
+      // Admins can also write/delete freely
+      allow write: if isApprovedAdmin();
+    }
+
+    // ---------------- departments ----------------
+    match /departments/{deptId} {
+      allow read: if isSignedIn();
+      allow write: if isApprovedAdmin();
+    }
+
+    // ---------------- pendingAccounts (optional mirror collection) ----------------
+    match /pendingAccounts/{docId} {
+      allow read, write: if isApprovedAdmin();
+      allow create: if isSignedIn();
+    }
+  }
+}

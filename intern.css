@@ -1,0 +1,112 @@
+/* ============================================================
+   intern.css — intern.html dashboard layout
+   (Reuses .dashboard-shell / .sidebar / .topbar / .table-card
+   structure defined for the admin dashboard, plus intern-only
+   components below.)
+   ============================================================ */
+
+.dashboard-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+@media (max-width: 900px) { .dashboard-shell { grid-template-columns: 1fr; } }
+
+.sidebar {
+  background: var(--color-card);
+  border-right: 1px solid var(--color-border);
+  padding: 1.5rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+@media (max-width: 900px) {
+  .sidebar { position: fixed; left: -280px; width: 260px; z-index: 500; transition: left var(--transition); box-shadow: var(--shadow-lg); }
+  .sidebar.sidebar-open { left: 0; }
+}
+.sidebar-brand { display: flex; align-items: center; gap: 0.6rem; font-weight: 800; padding: 0 0.4rem; }
+.sidebar-footer { border-top: 1px solid var(--color-border); padding-top: 1rem; margin-top: auto; }
+.logout-btn {
+  width: 100%; background: transparent; border: 1.5px solid var(--color-border); border-radius: 10px;
+  padding: 0.65rem; font-weight: 700; color: var(--color-error); display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+}
+.logout-btn:hover { background: rgba(220, 38, 38, 0.08); }
+
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; padding: 1.1rem clamp(1rem, 3vw, 1.75rem);
+  border-bottom: 1px solid var(--color-border); background: var(--color-card); position: sticky; top: 0; z-index: 50;
+}
+.topbar h2 { margin: 0; font-size: 1.15rem; }
+.topbar-actions { display: flex; align-items: center; gap: 0.75rem; }
+.hamburger { display: none; background: transparent; border: 1px solid var(--color-border); border-radius: 8px; width: 38px; height: 38px; font-size: 1.1rem; }
+@media (max-width: 900px) { .hamburger { display: inline-flex; align-items:center; justify-content:center; } }
+
+.dashboard-main { padding: clamp(1rem, 3vw, 1.75rem); max-width: 1200px; margin: 0 auto; width: 100%; }
+
+/* ---------- Clock / attendance card ---------- */
+.clock-card {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: #fff;
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 1.75rem;
+  box-shadow: var(--shadow-lg);
+}
+.clock-date { font-size: 0.9rem; opacity: 0.85; margin-bottom: 0.4rem; font-weight: 600; }
+.clock-time { font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 800; letter-spacing: 0.02em; margin-bottom: 1rem; font-variant-numeric: tabular-nums; }
+.clock-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.9rem; }
+.clock-actions .btn { min-width: 150px; }
+.clock-actions .btn-primary { background: #fff; color: var(--color-primary); }
+.clock-actions .btn-outline { border-color: rgba(255,255,255,0.6); color: #fff; }
+.clock-actions .btn-outline:hover:not(:disabled) { background: rgba(255,255,255,0.15); }
+
+/* ---------- Stats ---------- */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; margin-bottom: 1.75rem;
+}
+@media (max-width: 900px) {
+  .topbar { padding: 1rem; }
+  .dashboard-main { padding: 1rem; }
+}
+
+@media (max-width: 700px) { .stats-grid { grid-template-columns: 1fr; } }
+
+@media (max-width: 560px) {
+  .clock-card { padding: 1.4rem 1rem; }
+  .clock-actions { flex-direction: column; }
+  .clock-actions .btn { width: 100%; }
+  .profile-card { flex-direction: column; align-items: flex-start; }
+}
+.stat-card { background: var(--color-card); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow-sm); }
+.stat-card .stat-label { font-size: 0.8rem; color: var(--color-text-muted); font-weight: 600; margin-bottom: 0.4rem; }
+.stat-card .stat-value { font-size: 1.6rem; font-weight: 800; }
+
+/* ---------- Progress ---------- */
+.progress-card { margin-bottom: 1.75rem; }
+.progress-card h3 { margin: 0 0 0.9rem; font-size: 1rem; }
+.progress-bar-track { height: 12px; border-radius: 999px; background: var(--color-border); overflow: hidden; }
+.progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-primary), var(--color-accent)); transition: width 500ms ease; }
+.progress-label { margin-top: 0.6rem; font-size: 0.85rem; color: var(--color-text-muted); font-weight: 600; }
+
+/* ---------- Profile card ---------- */
+.profile-card { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.75rem; }
+.profile-avatar {
+  width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+}
+.profile-info h3 { margin: 0 0 0.2rem; font-size: 1.05rem; }
+.profile-info .muted-line { font-size: 0.85rem; color: var(--color-text-muted); margin: 0.1rem 0; }
+
+/* ---------- Table (shared look with admin tables) ---------- */
+.table-card { background: var(--color-card); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 560px; }
+thead th { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); padding: 0.9rem 1.1rem; border-bottom: 1px solid var(--color-border); background: var(--color-bg); }
+tbody td { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--color-border); font-size: 0.88rem; }
+tbody tr:last-child td { border-bottom: none; }
+.empty-row { text-align: center; color: var(--color-text-muted); padding: 2rem !important; }
+.card-title { font-size: 1rem; font-weight: 700; padding: 1.1rem 1.1rem 0; margin: 0; }

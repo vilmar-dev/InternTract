@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>InternTrack — Internship Time Tracking System</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="landing-nav">
+  <div class="brand">
+    <img src="img/macro.png" alt="InternTrack Logo" class="brand-logo">
+    <span>InternTrack</span>
+  </div>
+
+  <nav class="nav-actions">
+    <a class="btn btn-outline" href="login.html">Login</a>
+    <a class="btn btn-primary" href="register.html">Create Account</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <span class="hero-eyebrow">Internship Management, Simplified</span>
+      <h1>Internship <span>Time Tracking</span> System</h1>
+      <p>Track internship attendance and rendered hours efficiently. Interns log time with one click; administrators watch progress in real time.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="login.html">Login</a>
+        <a class="btn btn-outline" href="register.html">Create Account</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="hero-art-card">
+        <div class="row"><span>Rendered Hours</span><span>248 / 500</span></div>
+        <div class="big">49.6%</div>
+        <div class="hero-art-bar"><div class="hero-art-bar-fill"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <div class="feature-icon">⏱</div>
+      <h3>One-Click Time In/Out</h3>
+      <p>Interns clock in and out instantly. Hours worked are calculated and saved automatically.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Realtime Dashboards</h3>
+      <p>Admins see who's present, pending approvals, and completion status update live.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🗂</div>
+      <h3>Reports &amp; Export</h3>
+      <p>Filter attendance by date, department, or student, then export to CSV in one click.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="landing-footer">
+  &copy; <span id="year"></span> InternTrack. All rights reserved.
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

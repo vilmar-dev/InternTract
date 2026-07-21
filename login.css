@@ -1,0 +1,45 @@
+/* ============================================================
+   login.css — login.html specific styles
+   ============================================================ */
+
+.fieldset-plain {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.role-select {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 560px) {
+  .role-select { grid-template-columns: 1fr; }
+}
+.role-card {
+  border: 1.5px solid var(--color-border);
+  border-radius: 12px;
+  padding: 0.9rem;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  transition: border-color var(--transition), color var(--transition), background var(--transition);
+  position: relative;
+}
+.role-card input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.role-card .role-icon { font-size: 1.4rem; display: block; margin-bottom: 0.35rem; }
+.role-card:has(input:checked) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: rgba(10, 102, 194, 0.06);
+}

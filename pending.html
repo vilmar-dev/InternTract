@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pending Approval — InternTrack</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="auth-page">
+
+<div class="auth-shell">
+  <div class="auth-card" style="text-align:center;">
+    <div class="pending-icon">⏳</div>
+    <h1 style="margin: 0 0 0.6rem;">Awaiting Approval</h1>
+    <p class="muted" style="font-size: 0.95rem; margin: 0 0 1.75rem;">
+      Your account is waiting for administrator approval. You'll be able to sign in as soon as an admin approves your account.
+    </p>
+    <button id="checkStatusBtn" class="btn btn-primary btn-block">Check Status</button>
+    <button id="logoutBtn" class="btn btn-outline btn-block" style="margin-top: 0.75rem;">Logout</button>
+  </div>
+</div>
+
+<script type="module">
+  import { auth, db, doc, getDoc, onAuthStateChanged, signOut } from "./js/firebase.js";
+  import { showToast, showSpinner, hideSpinner } from "./js/utils.js";
+
+  let currentUser = null;
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
+    currentUser = user;
+  });
+
+  document.getElementById("checkStatusBtn").addEventListener("click", async () => {
+    if (!currentUser) return;
+    showSpinner();
+    try {
+      const snap = await getDoc(doc(db, "users", currentUser.uid));
+      const data = snap.data();
+      if (data.status === "approved") {
+        window.location.href = data.role === "admin" ? "admin.html" : "intern.html";
+      } else if (data.status === "rejected") {
+        showToast("Your account was rejected. Contact an administrator.", "error");
+        hideSpinner();
+      } else {
+        showToast("Still pending approval. Check back later.", "info");
+        hideSpinner();
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Could not check status right now.", "error");
+      hideSpinner();
+    }
+  });
+
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    if (!window.confirm("Are you sure you want to log out?")) return;
+    await signOut(auth);
+    window.location.href = "login.html";
+  });
+</script>
+</body>
+</html>

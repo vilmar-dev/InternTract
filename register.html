@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create Account — InternTrack</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/login.css" />
+</head>
+<body class="auth-page">
+
+<div class="auth-shell wide">
+  <a class="auth-back" href="index.html">&larr; Back to home</a>
+
+  <div class="auth-card">
+    <div class="auth-header">
+      <span class="brand-logo" style="margin:0 auto;">IT</span>
+      <h1>Create your account</h1>
+      <p>Register as an intern or an administrator</p>
+    </div>
+
+    <form id="registerForm" novalidate>
+      <div class="role-select">
+        <label class="role-card">
+          <input type="radio" name="accountType" value="intern" checked />
+          <span class="role-icon">🎓</span>
+          Intern
+        </label>
+        <label class="role-card">
+          <input type="radio" name="accountType" value="admin" />
+          <span class="role-icon">🛡</span>
+          Admin
+        </label>
+      </div>
+
+      <!-- ===================== INTERN FIELDS ===================== -->
+      <fieldset id="internFields" class="fieldset-plain">
+        <div class="field-row">
+          <div class="field">
+            <label for="internFullName">Full Name</label>
+            <input type="text" id="internFullName" name="internFullName" required />
+          </div>
+          <div class="field">
+            <label for="internSchool">School</label>
+            <input type="text" id="internSchool" name="internSchool" required />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="internDepartment">Department</label>
+            <input type="text" id="internDepartment" name="internDepartment" required />
+          </div>
+          <div class="field">
+            <label for="internEmail">Email</label>
+            <input type="email" id="internEmail" name="internEmail" required />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="internStartDate">Internship Start Date</label>
+            <input type="date" id="internStartDate" name="internStartDate" required />
+          </div>
+          <div class="field">
+            <label for="internRequiredHours">Required Hours</label>
+            <input type="number" id="internRequiredHours" name="internRequiredHours" min="1" step="0.5" required />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="internPhone">Phone Number</label>
+            <input type="tel" id="internPhone" name="internPhone" required />
+          </div>
+          <div class="field">
+            <label for="internStudentId">Student ID</label>
+            <input type="text" id="internStudentId" name="internStudentId" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="internPhoto">Profile Picture (optional)</label>
+          <input type="file" id="internPhoto" name="internPhoto" accept="image/*" />
+        </div>
+      </fieldset>
+
+      <!-- ===================== ADMIN FIELDS ===================== -->
+      <fieldset id="adminFields" class="fieldset-plain hidden">
+        <div class="field-row">
+          <div class="field">
+            <label for="adminFullName">Full Name</label>
+            <input type="text" id="adminFullName" name="adminFullName" />
+          </div>
+          <div class="field">
+            <label for="adminDepartment">Department</label>
+            <input type="text" id="adminDepartment" name="adminDepartment" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="adminEmail">Company Email</label>
+          <input type="email" id="adminEmail" name="adminEmail" placeholder="you@company.com" />
+        </div>
+        <p class="muted">Only company email addresses are accepted (e.g. name@company.com). Personal providers like Gmail, Yahoo, or Outlook are rejected.</p>
+      </fieldset>
+
+      <!-- ===================== SHARED PASSWORD FIELDS ===================== -->
+      <div class="field-row">
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required minlength="6" />
+        </div>
+        <div class="field">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    </form>
+
+    <p class="auth-footer-link">Already have an account? <a href="login.html">Login</a></p>
+  </div>
+</div>
+
+<script type="module" src="js/register.js"></script>
+</body>
+</html>

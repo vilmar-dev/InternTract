@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Dashboard — InternTrack</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+<div class="dashboard-shell">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-logo">IT</span>
+      <span>InternTrack</span>
+    </div>
+
+    <ul class="nav-list">
+      <li><a href="#" class="nav-link nav-active" data-section="section-dashboard"><span class="nav-icon">📊</span>Dashboard</a></li>
+      <li><a href="#" class="nav-link" data-section="section-interns"><span class="nav-icon">🎓</span>Interns</a></li>
+      <li><a href="#" class="nav-link" data-section="section-attendance"><span class="nav-icon">🕒</span>Attendance</a></li>
+      <li><a href="#" class="nav-link" data-section="section-pending"><span class="nav-icon">⏳</span>Pending Accounts</a></li>
+      <li><a href="#" class="nav-link" data-section="section-departments"><span class="nav-icon">🏢</span>Departments</a></li>
+      <li><a href="#" class="nav-link" data-section="section-reports"><span class="nav-icon">📁</span>Reports</a></li>
+      <li><a href="#" class="nav-link" data-section="section-profile"><span class="nav-icon">👤</span>Profile</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
+    </div>
+  </aside>
+
+  <div>
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <button class="hamburger" id="sidebarToggle">☰</button>
+        <h2>Admin Dashboard</h2>
+      </div>
+      <div class="topbar-actions">
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+      </div>
+    </header>
+
+    <main class="dashboard-main">
+
+      <!-- ===================== DASHBOARD ===================== -->
+      <section class="dashboard-section section-active" id="section-dashboard">
+        <div class="section-header">
+          <div>
+            <h1>Overview</h1>
+            <p>Live snapshot of today's internship activity</p>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon blue">🎓</div>
+            <div><div class="stat-value" id="statTotalInterns">0</div><div class="stat-label">Total Interns</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green">🟢</div>
+            <div><div class="stat-value" id="statPresentToday">0</div><div class="stat-label">Present Today</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon amber">⏳</div>
+            <div><div class="stat-value" id="statPendingAccounts">0</div><div class="stat-label">Pending Accounts</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon violet">✅</div>
+            <div><div class="stat-value" id="statCompletedInternship">0</div><div class="stat-label">Completed Internship</div></div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <h3 class="card-title" style="padding-bottom:1rem;">Attendance Today</h3>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Department</th><th>Time In</th><th>Time Out</th><th>Status</th><th>Rendered Today</th></tr>
+              </thead>
+              <tbody id="todayAttendanceBody">
+                <tr><td colspan="6" class="empty-row">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== INTERNS ===================== -->
+      <section class="dashboard-section" id="section-interns">
+        <div class="section-header">
+          <div><h1>Interns</h1><p>Search, view, deactivate, or delete intern accounts</p></div>
+        </div>
+        <div class="table-card">
+          <div class="table-toolbar">
+            <input type="text" id="internSearch" placeholder="Search by name or department…" />
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Department</th><th>School</th><th>Start Date</th><th>Required</th><th>Rendered</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="internTableBody">
+                <tr><td colspan="7" class="empty-row">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== ATTENDANCE ===================== -->
+      <section class="dashboard-section" id="section-attendance">
+        <div class="section-header">
+          <div><h1>Attendance</h1><p>Filter by date, department, or student — export as CSV</p></div>
+        </div>
+        <div class="table-card">
+          <div class="table-toolbar">
+            <input type="date" id="attendanceDateFilter" />
+            <select id="attendanceDeptFilter"><option value="">All Departments</option></select>
+            <input type="text" id="attendanceSearch" placeholder="Search by student name…" />
+            <span class="spacer"></span>
+            <button id="exportCsvBtn" class="btn btn-outline">⬇ Export CSV</button>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>Date</th><th>Name</th><th>Department</th><th>Time In</th><th>Time Out</th><th>Hours Rendered</th></tr>
+              </thead>
+              <tbody id="attendanceHistoryBody">
+                <tr><td colspan="6" class="empty-row">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== PENDING ACCOUNTS ===================== -->
+      <section class="dashboard-section" id="section-pending">
+        <div class="section-header">
+          <div><h1>Pending Accounts</h1><p>Approve or reject new intern and admin registrations</p></div>
+        </div>
+        <div class="table-card">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Email</th><th>Role</th><th>Department</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="pendingTableBody">
+                <tr><td colspan="5" class="empty-row">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== DEPARTMENTS ===================== -->
+      <section class="dashboard-section" id="section-departments">
+        <div class="section-header">
+          <div><h1>Departments</h1><p>Manage the list of departments interns can belong to</p></div>
+        </div>
+        <form id="addDeptForm" class="dept-form">
+          <input type="text" id="newDeptName" placeholder="New department name…" required />
+          <button type="submit" class="btn btn-primary">Add Department</button>
+        </form>
+        <div class="table-card">
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Department</th><th>Interns</th><th>Actions</th></tr></thead>
+              <tbody id="departmentListBody">
+                <tr><td colspan="3" class="empty-row">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== REPORTS ===================== -->
+      <section class="dashboard-section" id="section-reports">
+        <div class="section-header">
+          <div><h1>Reports</h1><p>Internship completion progress by intern</p></div>
+        </div>
+        <div class="table-card">
+          <div class="table-toolbar">
+            <select id="reportDeptFilter"><option value="">All Departments</option></select>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Name</th><th>Department</th><th>Required</th><th>Rendered</th><th>Progress</th></tr></thead>
+              <tbody id="reportTableBody">
+                <tr><td colspan="5" class="empty-row">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== PROFILE ===================== -->
+      <section class="dashboard-section" id="section-profile">
+        <div class="section-header">
+          <div><h1>Profile</h1><p>Your administrator account details</p></div>
+        </div>
+        <div class="card admin-profile-card">
+          <div class="admin-profile-avatar" id="adminAvatarInitial">A</div>
+          <h3 id="adminProfileName">—</h3>
+          <p class="muted" id="adminProfileEmail">—</p>
+          <p class="muted">Department: <span id="adminProfileDepartment">—</span></p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

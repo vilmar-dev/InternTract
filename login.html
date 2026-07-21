@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Login — InternTrack</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/login.css" />
+</head>
+<body class="auth-page">
+
+<div class="auth-shell">
+  <a class="auth-back" href="index.html">&larr; Back to home</a>
+
+  <div class="auth-card">
+    <div class="auth-header">
+      <span class="brand-logo" style="margin:0 auto;">IT</span>
+      <h1>Welcome back</h1>
+      <p>Sign in to your InternTrack account</p>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <div class="role-select">
+        <label class="role-card">
+          <input type="radio" name="loginRole" value="intern" checked />
+          <span class="role-icon">🎓</span>
+          Login as Intern
+        </label>
+        <label class="role-card">
+          <input type="radio" name="loginRole" value="admin" />
+          <span class="role-icon">🛡</span>
+          Login as Admin
+        </label>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com" />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="••••••••" />
+      </div>
+
+      <a href="#" id="forgotPasswordLink" class="forgot-link">Forgot password?</a>
+
+      <button type="submit" class="btn btn-primary btn-block">Login</button>
+    </form>
+
+    <p class="auth-footer-link">Don't have an account? <a href="register.html">Create one</a></p>
+  </div>
+</div>
+
+<script type="module" src="js/login.js"></script>
+</body>
+</html>
