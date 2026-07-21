@@ -4,11 +4,11 @@
 // ============================================================
 
 import {
-  auth, db, storage,
+  auth, db,
   createUserWithEmailAndPassword,
   updateProfile,
   doc, setDoc, serverTimestamp,
-  ref, uploadBytes, getDownloadURL
+  
 } from "./firebase.js";
 import { showToast, showSpinner, hideSpinner, isCompanyEmail } from "./utils.js";
 
@@ -67,18 +67,12 @@ async function registerIntern() {
   const requiredHours = parseFloat(form.internRequiredHours.value);
   const phone = form.internPhone.value.trim();
   const studentId = form.internStudentId.value.trim();
-  const photoFile = form.internPhoto.files[0] || null;
+  
 
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(cred.user, { displayName: fullName });
 
-  let photoURL = "";
-  if (photoFile) {
-    const photoRef = ref(storage, `profilePictures/${cred.user.uid}`);
-    await uploadBytes(photoRef, photoFile);
-    photoURL = await getDownloadURL(photoRef);
-  }
-
+ 
   await setDoc(doc(db, "users", cred.user.uid), {
     uid: cred.user.uid,
     role: "intern",
@@ -93,7 +87,7 @@ async function registerIntern() {
     remainingHours: requiredHours,
     phone,
     studentId,
-    photoURL,
+    photoURL: "",
     createdAt: serverTimestamp()
   });
 
