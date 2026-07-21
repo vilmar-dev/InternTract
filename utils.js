@@ -120,7 +120,7 @@ export function toDate(value) {
   return new Date(value);
 }
 
-/** Validate an email is a company domain (rejects common free providers) */
+/** Validate an email is a company domain (rejects common free providers) 
 export function isCompanyEmail(email) {
   const freeProviders = [
     "gmail.com", "yahoo.com", "outlook.com", "hotmail.com",
@@ -131,6 +131,21 @@ export function isCompanyEmail(email) {
   const domain = parts[1].trim();
   if (!domain.includes(".")) return false;
   return !freeProviders.includes(domain);
+} */
+
+
+
+/**
+ * Validate that the email belongs to your company domain.
+ */
+export function isCompanyEmail(email) {
+  const companyDomain = "macrologic.com"; // Change this to your own domain
+
+  const parts = String(email).toLowerCase().trim().split("@");
+
+  if (parts.length !== 2) return false;
+
+  return parts[1] === companyDomain;
 }
 
 /** Simple debounce helper, used for search inputs */
