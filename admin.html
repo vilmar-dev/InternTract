@@ -12,14 +12,12 @@
 <body>
 
 <div class="dashboard-shell">
-
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-     <header class="landing-nav">
-  <div class="brand">
-    <img src="macro.png" alt="InternTrack Logo" class="brand-logo">
-   <!-- <span>InternTrack</span> -->
-  </div>
+      <div class="brand">
+        <img src="macro.png" alt="InternTrack Logo" class="brand-logo">
+        <span>InternTrack</span>
+      </div>
     </div>
 
     <ul class="nav-list">
@@ -37,7 +35,7 @@
     </div>
   </aside>
 
-  <div>
+  <div class="main-panel">
     <header class="topbar">
       <div style="display:flex;align-items:center;gap:0.75rem;">
         <button class="hamburger" id="sidebarToggle">☰</button>
@@ -217,6 +215,8 @@
     </main>
   </div>
 </div>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
 <script type="module" src="admin.js"></script>
 </body>
