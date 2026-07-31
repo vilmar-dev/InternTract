@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <link rel="icon" type="image/png" href="macro.png"> 
@@ -17,11 +17,11 @@
   <div class="brand">
     <img src="macro.png" alt="InternTrack Logo" class="brand-logo">
     <span>InternTrack</span>
-  </div>
+  </div> -->
 
-    <div class="profile-card" style="margin-bottom:0;">
+  <!--  <div class="profile-card" style="margin-bottom:0;">  -->
     <!-- <img id="profilePhoto" class="profile-avatar" src="https://api.dicebear.com/7.x/initials/svg?seed=Intern" alt="Profile photo" /> -->
-      <div class="profile-info">
+   <!--   <div class="profile-info">
         <h3 id="profileName">—</h3>
         <p class="muted-line" id="profileDepartment">—</p>
       </div>
@@ -33,6 +33,155 @@
   </aside>
 
   <div>
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <button class="hamburger" id="sidebarToggle">☰</button>
+        <h2>My Dashboard</h2>
+      </div>
+      <div class="topbar-actions">
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+      </div>
+    </header>
+
+    <main class="dashboard-main">
+
+      <section class="clock-card">
+        <div class="clock-date" id="todayDateLabel">Loading date…</div>
+        <div class="clock-time" id="liveClock">--:--:--</div>
+        <div class="clock-actions">
+          <button id="timeInBtn" class="btn btn-primary" disabled>Time In</button>
+          <button id="timeOutBtn" class="btn btn-outline" disabled>Time Out</button>
+        </div>
+        <span class="status-badge status-pending" id="attendanceStatusBadge">Loading…</span>
+      </section>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Required Hours</div>
+          <div class="stat-value" id="requiredHoursValue">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Rendered Hours</div>
+          <div class="stat-value" id="renderedHoursValue">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Remaining Hours</div>
+          <div class="stat-value" id="remainingHoursValue">—</div>
+        </div>
+      </section>
+
+      <section class="card progress-card">
+        <h3>Internship Completion</h3>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">0% of internship completed</div>
+      </section>
+
+      <section class="card profile-card">   -->
+      <!--  <img id="profilePhotoLarge" class="profile-avatar" style="width:64px;height:64px;" src="https://api.dicebear.com/7.x/initials/svg?seed=Intern" alt="" /> -->
+  
+
+<!-- <div class="profile-info">
+          <h3 id="profileNameLarge">—</h3>
+          <p class="muted-line">School: <span id="profileSchool">—</span></p>
+          <p class="muted-line">Department: <span id="profileDepartmentLarge">—</span></p>
+          <p class="muted-line">Start Date: <span id="profileStartDate">—</span></p>
+        </div>
+      </section>
+
+      <section class="table-card" style="margin-bottom:1.75rem;">
+        <h3 class="card-title">Today's Attendance — All Interns</h3>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="todayAllInternsBody">
+              <tr><td colspan="5" class="empty-row">Loading today's attendance…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="table-card">
+        <h3 class="card-title">Attendance History</h3>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+                <th>Hours Rendered</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <tr><td colspan="5" class="empty-row">Loading attendance history…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script type="module" src="intern.js"></script>
+</body>
+</html>  -->
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" href="macro.png"> 
+ 
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Intern Dashboard — InternTrack</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="intern.css" />
+</head>
+<body>
+
+<div class="dashboard-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand">
+        <img src="macro.png" alt="InternTrack Logo" class="brand-logo">
+        <span>  </span>
+      </div>
+    </div>
+
+    <div class="profile-card sidebar-profile-card">
+      <div class="profile-info">
+        <h3 id="profileName">—</h3>
+        <p class="muted-line" id="profileDepartment">—</p>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
+    </div>
+  </aside>
+
+  <div class="main-panel">
     <header class="topbar">
       <div style="display:flex;align-items:center;gap:0.75rem;">
         <button class="hamburger" id="sidebarToggle">☰</button>
@@ -135,3 +284,4 @@
 <script type="module" src="intern.js"></script>
 </body>
 </html>
+
