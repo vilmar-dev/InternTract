@@ -27,6 +27,7 @@ const el = {
   themeToggle: document.getElementById("themeToggle"),
   sidebarToggle: document.getElementById("sidebarToggle"),
   sidebar: document.getElementById("sidebar"),
+  sidebarBackdrop: document.getElementById("sidebarBackdrop"),
   navLinks: document.querySelectorAll(".nav-link[data-section]"),
   sections: document.querySelectorAll(".dashboard-section"),
 
@@ -70,7 +71,11 @@ async function init() {
 
   attachLogoutHandler(el.logoutBtn);
   el.themeToggle?.addEventListener("click", () => toggleTheme());
-  el.sidebarToggle?.addEventListener("click", () => el.sidebar.classList.toggle("sidebar-open"));
+  el.sidebarToggle?.addEventListener("click", toggleSidebar);
+  el.sidebarBackdrop?.addEventListener("click", closeSidebar);
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 960) closeSidebar();
+  });
 
   setupNavigation();
   listenToInterns();
@@ -91,6 +96,18 @@ async function init() {
 // ------------------------------------------------------------
 // Navigation (sidebar sections)
 // ------------------------------------------------------------
+function toggleSidebar() {
+  const isOpen = el.sidebar.classList.toggle("sidebar-open");
+  el.sidebarBackdrop?.classList.toggle("show", isOpen);
+  document.body.classList.toggle("sidebar-open", isOpen);
+}
+
+function closeSidebar() {
+  el.sidebar.classList.remove("sidebar-open");
+  el.sidebarBackdrop?.classList.remove("show");
+  document.body.classList.remove("sidebar-open");
+}
+
 function setupNavigation() {
   el.navLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
@@ -98,7 +115,7 @@ function setupNavigation() {
       const target = link.dataset.section;
       el.sections.forEach((s) => s.classList.toggle("section-active", s.id === target));
       el.navLinks.forEach((l) => l.classList.toggle("nav-active", l === link));
-      el.sidebar.classList.remove("sidebar-open");
+      closeSidebar();
     });
   });
 }
