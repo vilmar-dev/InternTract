@@ -495,7 +495,7 @@ function getFilteredHistory() {
 function renderAttendanceHistory() {
   const rows = getFilteredHistory();
   if (rows.length === 0) {
-    el.attendanceTableBody.innerHTML = `<tr><td colspan="6" class="empty-row">No attendance records match your filters.</td></tr>`;
+    el.attendanceTableBody.innerHTML = `<tr><td colspan="7" class="empty-row">No attendance records match your filters.</td></tr>`;
     return;
   }
   el.attendanceTableBody.innerHTML = rows
@@ -507,8 +507,31 @@ function renderAttendanceHistory() {
         <td>${formatShortTime(toDate(a.timeIn))}</td>
         <td>${a.timeOut ? formatShortTime(toDate(a.timeOut)) : "—"}</td>
         <td>${a.hoursRendered ? formatHoursMinutes(a.hoursRendered) : "—"}</td>
+        <td class="table-actions">
+          <button class="btn-icon btn-danger" data-action="delete-attendance" data-id="${a.id}" title="Delete this attendance record">🗑</button>
+        </td>
       </tr>`)
     .join("");
+
+  el.attendanceTableBody.querySelectorAll("button[data-action='delete-attendance']").forEach((btn) => {
+    btn.addEventListener("click", () => handleDeleteAttendanceRecord(btn.dataset.id));
+  });
+}
+
+async function handleDeleteAttendanceRecord(id) {
+  const record = allAttendanceHistory.find((item) => item.id === id);
+  if (!record) return;
+
+  const confirmMessage = `Delete attendance for ${record.userName || "this student"} on ${record.date}?`;
+  if (!window.confirm(confirmMessage)) return;
+
+  try {
+    await deleteDoc(doc(db, "attendance", id));
+    showToast("Attendance record deleted.", "success");
+  } catch (err) {
+    console.error(err);
+    showToast("Failed to delete attendance record.", "error");
+  }
 }
 
 function exportAttendanceCsv() {
