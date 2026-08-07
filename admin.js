@@ -4,14 +4,15 @@
 
 import {
   db,
-  doc, getDoc, updateDoc, deleteDoc, setDoc,
-  collection, query, where, orderBy, onSnapshot, getDocs
+  doc, getDoc, updateDoc, deleteDoc, setDoc, addDoc,
+  collection, query, where, orderBy, onSnapshot, getDocs,
+  serverTimestamp, Timestamp
 } from "./firebase.js";
 import { requireAuth, attachLogoutHandler } from "./auth.js";
 import {
   showToast, showSpinner, hideSpinner, escapeHtml,
   formatDateKey, formatShortTime, formatHoursMinutes, toDate,
-  applyStoredTheme, toggleTheme, debounce, downloadTextFile, arrayToCsv
+  diffInHours, applyStoredTheme, toggleTheme, debounce, downloadTextFile, arrayToCsv
 } from "./utils.js";
 
 applyStoredTheme();
@@ -21,6 +22,7 @@ let allAttendanceToday = [];
 let allAttendanceHistory = [];
 let allPending = [];
 let departments = new Set();
+let manualAttendanceId = null;
 
 const el = {
   logoutBtn: document.getElementById("logoutBtn"),
@@ -38,6 +40,7 @@ const el = {
   todayTableBody: document.getElementById("todayAttendanceBody"),
 
   internSearch: document.getElementById("internSearch"),
+  internStatusFilter: document.getElementById("internStatusFilter"),
   internTableBody: document.getElementById("internTableBody"),
 
   attendanceDateFilter: document.getElementById("attendanceDateFilter"),
@@ -54,6 +57,14 @@ const el = {
 
   reportDeptSelect: document.getElementById("reportDeptFilter"),
   reportTableBody: document.getElementById("reportTableBody"),
+
+  manualAttendanceForm: document.getElementById("manualAttendanceForm"),
+  manualInternSelect: document.getElementById("manualInternSelect"),
+  manualAttendanceDate: document.getElementById("manualAttendanceDate"),
+  manualTimeIn: document.getElementById("manualTimeIn"),
+  manualTimeOut: document.getElementById("manualTimeOut"),
+  manualComment: document.getElementById("manualComment"),
+  discardAttendanceBtn: document.getElementById("discardAttendanceBtn"),
 
   profileName: document.getElementById("adminProfileName"),
   profileEmail: document.getElementById("adminProfileEmail"),
@@ -85,12 +96,18 @@ async function init() {
   listenToDepartments();
 
   el.internSearch?.addEventListener("input", debounce(renderInternTable, 200));
+  el.internStatusFilter?.addEventListener("change", renderInternTable);
   el.attendanceSearch?.addEventListener("input", debounce(renderAttendanceHistory, 200));
   el.attendanceDateFilter?.addEventListener("change", renderAttendanceHistory);
   el.attendanceDeptFilter?.addEventListener("change", renderAttendanceHistory);
   el.exportCsvBtn?.addEventListener("click", exportAttendanceCsv);
   el.addDeptForm?.addEventListener("submit", handleAddDepartment);
   el.reportDeptSelect?.addEventListener("change", renderReport);
+  el.manualAttendanceForm?.addEventListener("submit", handleManualAttendanceSubmit);
+  el.manualInternSelect?.addEventListener("change", loadManualAttendanceRecord);
+  el.manualAttendanceDate?.addEventListener("change", loadManualAttendanceRecord);
+  el.discardAttendanceBtn?.addEventListener("click", handleDiscardAttendance);
+  if (el.manualAttendanceDate) el.manualAttendanceDate.value = formatDateKey();
 }
 
 // ------------------------------------------------------------
@@ -132,6 +149,7 @@ function listenToInterns() {
     renderInternTable();
     renderReport();
     populateDeptFilters();
+    populateManualAttendanceInterns();
   });
 }
 
@@ -145,19 +163,41 @@ function renderStats() {
   el.presentToday.textContent = allAttendanceToday.filter((a) => a.status === "active").length;
 }
 
+function getInternCompletionDate(intern) {
+  if (!intern || (intern.requiredHours || 0) <= 0) return null;
+  const history = allAttendanceHistory
+    .filter((a) => a.userId === intern.id && a.hoursRendered != null)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  let cumulative = 0;
+  for (const record of history) {
+    cumulative += Number(record.hoursRendered) || 0;
+    if (cumulative >= (intern.requiredHours || 0)) {
+      return record.date;
+    }
+  }
+  return null;
+}
+
 function renderInternTable() {
   const search = (el.internSearch?.value || "").toLowerCase().trim();
+  const filterStatus = el.internStatusFilter?.value || "all";
   const rows = allInterns
     .filter((i) => i.status !== "pending")
+    .filter((i) => {
+      if (filterStatus === "completed") return (i.remainingHours ?? i.requiredHours) <= 0;
+      return true;
+    })
     .filter((i) => !search || i.name?.toLowerCase().includes(search) || i.department?.toLowerCase().includes(search));
 
   if (rows.length === 0) {
-    el.internTableBody.innerHTML = `<tr><td colspan="7" class="empty-row">No interns found.</td></tr>`;
+    el.internTableBody.innerHTML = `<tr><td colspan="8" class="empty-row">No interns found.</td></tr>`;
     return;
   }
 
   el.internTableBody.innerHTML = rows
-    .map((i) => `
+    .map((i) => {
+      const completionDate = getInternCompletionDate(i);
+      return `
       <tr>
         <td>${escapeHtml(i.name)}</td>
         <td>${escapeHtml(i.department)}</td>
@@ -165,6 +205,7 @@ function renderInternTable() {
         <td>${escapeHtml(i.startDate)}</td>
         <td>${formatHoursMinutes(i.requiredHours || 0)}</td>
         <td>${formatHoursMinutes(i.renderedHours || 0)}</td>
+        <td>${completionDate ? escapeHtml(completionDate) : "—"}</td>
         <td class="table-actions">
           <button class="btn-icon" data-action="view" data-id="${i.id}" title="View profile">👁</button>
           <button class="btn-icon" data-action="deactivate" data-id="${i.id}" title="${i.status === "deactivated" ? "Activate" : "Deactivate"}">
@@ -172,7 +213,8 @@ function renderInternTable() {
           </button>
           <button class="btn-icon btn-danger" data-action="delete" data-id="${i.id}" title="Delete">🗑</button>
         </td>
-      </tr>`)
+      </tr>`;
+    })
     .join("");
 
   el.internTableBody.querySelectorAll("button[data-action]").forEach((btn) => {
@@ -281,13 +323,14 @@ function renderTodayTable() {
     .map((a) => {
       const intern = allInterns.find((i) => i.id === a.userId);
       const statusClass = a.status === "completed" ? "status-complete" : "status-active";
+      const statusLabel = a.status === "completed" ? "Off Duty" : "On Duty";
       return `
         <tr>
           <td>${escapeHtml(a.userName)}</td>
           <td>${escapeHtml(a.department)}</td>
           <td>${formatShortTime(toDate(a.timeIn))}</td>
           <td>${a.timeOut ? formatShortTime(toDate(a.timeOut)) : "—"}</td>
-          <td><span class="status-badge ${statusClass}">${a.status === "completed" ? "Completed" : "Active"}</span></td>
+          <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
           <td>${a.hoursRendered ? formatHoursMinutes(a.hoursRendered) : "—"}${intern ? ` <span class="muted">(${formatHoursMinutes(intern.remainingHours || 0)} left)</span>` : ""}</td>
         </tr>`;
     })
@@ -302,7 +345,138 @@ function listenToAttendanceHistory() {
   onSnapshot(q, (snap) => {
     allAttendanceHistory = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     renderAttendanceHistory();
+    renderInternTable();
   });
+}
+
+function populateManualAttendanceInterns() {
+  if (!el.manualInternSelect) return;
+  const options = ["<option value=\"\">Select student…</option>"]
+    .concat(allInterns
+      .filter((i) => i.status === "approved" || i.status === "deactivated")
+      .map((i) => `<option value="${escapeHtml(i.id)}">${escapeHtml(i.name)} (${escapeHtml(i.department || "No dept")})</option>`)
+    );
+  el.manualInternSelect.innerHTML = options.join("");
+}
+
+async function loadManualAttendanceRecord() {
+  if (!el.manualInternSelect || !el.manualAttendanceDate) return;
+  manualAttendanceId = null;
+  el.manualComment.value = "";
+  el.manualTimeIn.value = "";
+  el.manualTimeOut.value = "";
+
+  const userId = el.manualInternSelect.value;
+  const date = el.manualAttendanceDate.value;
+  if (!userId || !date) return;
+
+  const q = query(
+    collection(db, "attendance"),
+    where("userId", "==", userId),
+    where("date", "==", date),
+    orderBy("timestamp", "desc")
+  );
+  const snap = await getDocs(q);
+  const record = snap.docs[0];
+  if (!record) return;
+
+  const data = record.data();
+  manualAttendanceId = record.id;
+  el.manualTimeIn.value = data.timeIn ? toDate(data.timeIn).toISOString().slice(11, 16) : "";
+  el.manualTimeOut.value = data.timeOut ? toDate(data.timeOut).toISOString().slice(11, 16) : "";
+  el.manualComment.value = data.comment || "";
+}
+
+async function handleManualAttendanceSubmit(event) {
+  event.preventDefault();
+  if (!el.manualInternSelect || !el.manualAttendanceDate || !el.manualTimeIn || !el.manualTimeOut) return;
+
+  const userId = el.manualInternSelect.value;
+  const date = el.manualAttendanceDate.value;
+  const timeIn = el.manualTimeIn.value;
+  const timeOut = el.manualTimeOut.value;
+  const comment = el.manualComment.value.trim();
+
+  if (!userId || !date || !timeIn || !timeOut) {
+    showToast("Please enter student, date, time in and time out.", "error");
+    return;
+  }
+  if (timeOut <= timeIn) {
+    showToast("Time out must be later than time in.", "error");
+    return;
+  }
+
+  const intern = allInterns.find((i) => i.id === userId);
+  if (!intern) {
+    showToast("Selected student not found.", "error");
+    return;
+  }
+
+  const timeInDate = new Date(`${date}T${timeIn}:00`);
+  const timeOutDate = new Date(`${date}T${timeOut}:00`);
+  const hoursRendered = Math.max(diffInHours(timeInDate, timeOutDate), 0);
+  const status = "completed";
+
+  const attendancePayload = {
+    userId,
+    userName: intern.name,
+    department: intern.department || "",
+    date,
+    timeIn: Timestamp.fromDate(timeInDate),
+    timeOut: Timestamp.fromDate(timeOutDate),
+    hoursRendered,
+    status,
+    comment,
+    timestamp: serverTimestamp()
+  };
+
+  try {
+    showSpinner();
+    if (manualAttendanceId) {
+      await updateDoc(doc(db, "attendance", manualAttendanceId), attendancePayload);
+      showToast("Attendance record updated.", "success");
+    } else {
+      await addDoc(collection(db, "attendance"), attendancePayload);
+      showToast("Attendance record saved.", "success");
+    }
+
+    if (intern.status === "approved" || intern.status === "deactivated") {
+      const freshUserSnap = await getDoc(doc(db, "users", userId));
+      const freshUser = freshUserSnap.data();
+      const newRendered = (freshUser.renderedHours || 0) + hoursRendered;
+      const newRemaining = Math.max((freshUser.requiredHours || 0) - newRendered, 0);
+      await updateDoc(doc(db, "users", userId), {
+        renderedHours: newRendered,
+        remainingHours: newRemaining
+      });
+    }
+
+    loadManualAttendanceRecord();
+  } catch (err) {
+    console.error(err);
+    showToast("Failed to save manual attendance.", "error");
+  } finally {
+    hideSpinner();
+  }
+}
+
+async function handleDiscardAttendance() {
+  if (!manualAttendanceId) {
+    showToast("No attendance record selected to discard.", "info");
+    return;
+  }
+  if (!window.confirm("Discard this attendance record? This will remove it permanently.")) return;
+
+  try {
+    await deleteDoc(doc(db, "attendance", manualAttendanceId));
+    showToast("Attendance record discarded.", "success");
+    manualAttendanceId = null;
+    if (el.manualAttendanceForm) el.manualAttendanceForm.reset();
+    if (el.manualAttendanceDate) el.manualAttendanceDate.value = formatDateKey();
+  } catch (err) {
+    console.error(err);
+    showToast("Failed to discard attendance.", "error");
+  }
 }
 
 function getFilteredHistory() {
