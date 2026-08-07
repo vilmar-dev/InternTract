@@ -61,6 +61,7 @@ async function registerIntern() {
   const fullName = form.internFullName.value.trim();
   const school = form.internSchool.value.trim();
   const department = form.internDepartment.value.trim();
+  const course = form.internCourse.value.trim();
   const email = form.internEmail.value.trim();
   const password = form.password.value;
   const startDate = form.internStartDate.value;
@@ -80,6 +81,7 @@ async function registerIntern() {
     name: fullName,
     school,
     department,
+    course,
     email,
     startDate,
     requiredHours,
