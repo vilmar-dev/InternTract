@@ -282,6 +282,67 @@ tbody tr:hover { background: var(--color-bg); }
 .dept-form { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; }
 .dept-form input { flex: 1; }
 
+.manual-attendance-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+.manual-attendance-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.manual-attendance-form label {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+.manual-attendance-form input,
+.manual-attendance-form select {
+  min-height: 44px;
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 0.92rem;
+}
+.manual-attendance-form .form-full { grid-column: span 4; }
+.manual-attendance-form .btn-row {
+  grid-column: span 4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+.manual-attendance-form .btn-row .btn {
+  min-width: 170px;
+}
+
+@media (max-width: 900px) {
+  .manual-attendance-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .manual-attendance-form .form-full,
+  .manual-attendance-form .btn-row {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 560px) {
+  .manual-attendance-form {
+    grid-template-columns: 1fr;
+  }
+  .manual-attendance-form .form-full,
+  .manual-attendance-form .btn-row {
+    grid-column: span 1;
+  }
+  .manual-attendance-form .btn-row {
+    flex-direction: column;
+  }
+}
+
 /* ---------- Mini progress (report table) ---------- */
 .mini-progress { width: 90px; height: 6px; border-radius: 999px; background: var(--color-border); display: inline-block; margin-right: 0.5rem; overflow: hidden; vertical-align: middle; }
 .mini-progress-fill { height: 100%; background: linear-gradient(90deg, var(--color-primary), var(--color-accent)); }
