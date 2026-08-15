@@ -308,7 +308,7 @@
     <div class="sidebar-brand">
       <div class="brand">
         <img src="macro.png" alt="InternTrack Logo" class="brand-logo">
-        <span>  </span>
+    <!--    <span>  </span> -->
       </div>
     </div>
 
@@ -319,17 +319,86 @@
       </div>
     </div>
 
-    <div class="sidebar-footer">
-      <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
-    </div>
+ <!--  <div class="sidebar-footer">
+      <button id="logoutBtn" class="logout-btn">🚪 Logout</button> <br>
+     
+<button class="logout-btn">  <a id="me" href="https://vilmar-dev.github.io/Portfolio/" target="_blank">Connect with Developer ➡️</a> </button> 
+
+    </div> -->
+
+<div class="sidebar-footer">
+
+  <button id="logoutBtn" class="sidebar-action-btn">
+    🚪 Logout
+  </button>
+
+  <a
+    id="me"
+    href="https://vilmar-dev.github.io/Portfolio/"
+    target="_blank"
+    class="sidebar-action-btn"
+  >
+    Connect with Developer ➡️
+  </a>
+
+</div>
+
+
+
+
+
+
+
+   
   </aside>
 
-  <div class="main-panel">
+  <div class="main-panel"> 
     <header class="topbar">
-      <div style="display:flex;align-items:center;gap:0.75rem;">
-        <button class="hamburger" id="sidebarToggle">☰</button>
-        <h2>My Dashboard</h2>
-      </div>
+   <!--   <div style="display:flex;align-items:center;gap:0.75rem;">
+       <button class="hamburger" id="sidebarToggle">☰</button> 
+        <h2>My Dashboard</h2> 
+
+
+
+     
+
+
+
+
+
+       
+      </div> -->
+
+
+
+<div style="display:flex;align-items:center;gap:0.75rem;">
+
+  <button class="hamburger" id="sidebarToggle">☰</button>
+
+  <h2>My Dashboard</h2>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+
+    <button id="mobileLogoutBtn" class="mobile-menu-btn">
+      🚪 Logout
+    </button>
+
+    <a
+      href="https://vilmar-dev.github.io/Portfolio/"
+      target="_blank"
+      class="mobile-menu-btn"
+    >
+      Connect with Developer ➡️
+    </a>
+
+  </div>
+
+</div>
+
+
+
+     
       <div class="topbar-actions">
         <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
       </div>
@@ -428,9 +497,3 @@
 <script type="module" src="intern.js"></script>
 </body>
 </html>
-
-
-
-
-
-
