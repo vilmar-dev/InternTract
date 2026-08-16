@@ -16,6 +16,14 @@
 <body>
 
 <header class="landing-nav">
+
+<!-- PWA -->
+
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0b1f3a">
+<link rel="apple-touch-icon" href="./interntrack-icon-192x192.png">
+
+
   <div class="brand">
     <img src="macro.png" alt="InternTrack Logo" class="brand-logo">
     <span>InternTrack</span>
@@ -82,6 +90,25 @@
 
 
 
-<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script>document.getElementById("year").textContent = new Date().getFullYear();  </script>
+
+
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("./service-worker.js")
+        .then((registration) => {
+          console.log("Service Worker registered:", registration.scope);
+        })
+        .catch((error) => {
+          console.error("Service Worker registration failed:", error);
+        });
+    });
+  }
+</script>
+
+
 </body>
 </html>
