@@ -1,6 +1,8 @@
 {
+  "id": "./",
   "name": "InternTrack",
   "short_name": "InternTrack",
+  "description": "Internship attendance and time tracking system",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
