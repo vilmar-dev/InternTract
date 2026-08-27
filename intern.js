@@ -1,6 +1,4 @@
-// ============================================================
-// intern.js — intern.html
-// ============================================================
+
 
 import {
   db,
@@ -180,6 +178,47 @@ async function handleTimeIn() {
   }
 }
 
+
+
+/* added function for 9hours */
+
+
+function calculateRenderedHours(timeIn, timeOut) {
+  const start = new Date(timeIn);
+  const end = new Date(timeOut);
+
+  // Total elapsed time
+  let workedMilliseconds = Math.max(end - start, 0);
+
+  // Lunch break: 12:00 PM - 1:00 PM
+  const lunchStart = new Date(start);
+  lunchStart.setHours(12, 0, 0, 0);
+
+  const lunchEnd = new Date(start);
+  lunchEnd.setHours(13, 0, 0, 0);
+
+  // Calculate how much of the attendance overlaps lunch
+  const overlapStart = Math.max(start.getTime(), lunchStart.getTime());
+  const overlapEnd = Math.min(end.getTime(), lunchEnd.getTime());
+
+  if (overlapEnd > overlapStart) {
+    workedMilliseconds -= overlapEnd - overlapStart;
+  }
+
+  // Convert milliseconds to hours
+  let renderedHours = workedMilliseconds / (1000 * 60 * 60);
+
+  // Maximum allowed rendered hours per Time In
+  renderedHours = Math.min(renderedHours, 9);
+
+  return Math.max(renderedHours, 0);
+}
+
+/*ended here*/
+
+
+
+
 async function handleTimeOut() {
   if (!todayAttendance || !todayAttendance.timeIn || todayAttendance.timeOut) {
     showToast("You need to time in before timing out.", "error");
@@ -189,7 +228,11 @@ async function handleTimeOut() {
   try {
     const now = new Date();
     const timeInDate = toDate(todayAttendance.timeIn);
-    const hoursWorked = Math.max(diffInHours(timeInDate, now), 0);
+   /* const hoursWorked = Math.max(diffInHours(timeInDate, now), 0); */
+
+   /* added */
+   const hoursWorked = calculateRenderedHours(timeInDate, now);
+   /*end here */
 
     await updateDoc(doc(db, "attendance", todayAttendanceId), {
       timeOut: Timestamp.fromDate(now),
@@ -286,4 +329,37 @@ function listenToTodayAllInterns() {
 
 window.addEventListener("beforeunload", () => {
   if (clockInterval) clearInterval(clockInterval);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+const sidebarToggle = document.getElementById("sidebarToggle");
+const mobileMenu = document.getElementById("mobileMenu");
+const mobileLogoutBtn = document.getElementById("mobileLogoutBtn");
+
+sidebarToggle.addEventListener("click", (event) => {
+  event.stopPropagation();
+  mobileMenu.classList.toggle("active");
+});
+
+mobileLogoutBtn.addEventListener("click", () => {
+  document.getElementById("logoutBtn").click();
+});
+
+document.addEventListener("click", (event) => {
+  if (
+    !mobileMenu.contains(event.target) &&
+    !sidebarToggle.contains(event.target)
+  ) {
+    mobileMenu.classList.remove("active");
+  }
 });
