@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Support the Developer</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, #dff4ff 0%, transparent 30%),
+        radial-gradient(circle at 90% 80%, #e5f7ff 0%, transparent 30%),
+        #f8fcff;
+      color: #17324d;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1180px;
+      margin: auto;
+    }
+
+    /* =========================
+       NAVBAR
+    ========================== */
+
+    nav {
+      height: 85px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      text-decoration: none;
+      font-size: 22px;
+      font-weight: 800;
+      color: #17324d;
+    }
+
+    .logo span {
+      color: #46aee8;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      color: #56748e;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #299bd8;
+    }
+
+    .nav-btn {
+      background: #4bb8ed;
+      color: white !important;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(75, 184, 237, 0.25);
+      transition: 0.3s;
+    }
+
+    .nav-btn:hover {
+      background: #299bd8;
+      transform: translateY(-2px);
+    }
+
+    /* HAMBURGER BUTTON - HIDDEN ON DESKTOP */
+    .menu-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+
+      background: #ffffff;
+      border: 1px solid #d6eefb;
+      border-radius: 12px;
+
+      cursor: pointer;
+
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+
+      box-shadow: 0 8px 20px rgba(46, 142, 194, 0.08);
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 21px;
+      height: 2px;
+
+      background: #299bd8;
+      border-radius: 10px;
+
+      transition: 0.3s ease;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* =========================
+       HERO SECTION
+    ========================== */
+
+    .hero {
+      min-height: calc(100vh - 85px);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 70px;
+      padding: 60px 0 100px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      background: white;
+      color: #299bd8;
+
+      border: 1px solid #d6eefb;
+      padding: 9px 16px;
+      border-radius: 100px;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      box-shadow: 0 6px 25px rgba(46, 142, 194, 0.08);
+
+      margin-bottom: 25px;
+    }
+
+    .hero h1 {
+      font-size: clamp(48px, 6vw, 82px);
+      line-height: 1;
+      letter-spacing: -4px;
+      color: #15314d;
+    }
+
+    .hero h1 span {
+      color: #4bb8ed;
+    }
+
+    .hero-description {
+      max-width: 630px;
+      margin-top: 28px;
+      font-size: 18px;
+      line-height: 1.75;
+      color: #638098;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 35px;
+    }
+
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+
+      text-decoration: none;
+
+      background: #4bb8ed;
+      color: white;
+
+      padding: 17px 27px;
+      border-radius: 14px;
+
+      font-size: 15px;
+      font-weight: 700;
+
+      box-shadow: 0 12px 30px rgba(75, 184, 237, 0.25);
+
+      transition: 0.3s;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-4px);
+      background: #299bd8;
+    }
+
+    .secondary-btn {
+      display: inline-flex;
+      align-items: center;
+
+      text-decoration: none;
+
+      background: white;
+      color: #299bd8;
+
+      border: 1px solid #d5eefb;
+
+      padding: 17px 27px;
+      border-radius: 14px;
+
+      font-size: 15px;
+      font-weight: 700;
+
+      transition: 0.3s;
+    }
+
+    .secondary-btn:hover {
+      transform: translateY(-3px);
+      border-color: #4bb8ed;
+    }
+
+    /* =========================
+       HERO SUPPORT CARD
+    ========================== */
+
+    .support-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .circle-bg {
+      position: absolute;
+
+      width: 430px;
+      height: 430px;
+
+      background: #9cddff;
+
+      opacity: 0.25;
+      border-radius: 50%;
+
+      filter: blur(2px);
+    }
+
+    .support-card {
+      position: relative;
+
+      width: 100%;
+      max-width: 410px;
+
+      background: rgba(255, 255, 255, 0.93);
+
+      border: 1px solid rgba(216, 239, 251, 0.9);
+
+      border-radius: 30px;
+
+      padding: 40px;
+
+      box-shadow: 0 30px 80px rgba(71, 139, 177, 0.15);
+
+      backdrop-filter: blur(15px);
+    }
+
+    .coffee-icon {
+      width: 90px;
+      height: 90px;
+
+      margin: auto auto 24px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #e2f6ff;
+
+      border-radius: 50%;
+
+      font-size: 44px;
+    }
+
+    .support-card h2 {
+      text-align: center;
+      color: #17324d;
+      font-size: 27px;
+    }
+
+    .support-card p {
+      text-align: center;
+      color: #71899c;
+      line-height: 1.65;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .support-btn {
+      display: block;
+
+      margin-top: 25px;
+
+      text-align: center;
+
+      background: #4bb8ed;
+      color: white;
+
+      padding: 15px;
+
+      border-radius: 12px;
+
+      text-decoration: none;
+      font-weight: 700;
+
+      transition: 0.3s;
+    }
+
+    .support-btn:hover {
+      background: #299bd8;
+      transform: translateY(-2px);
+    }
+
+    /* =========================
+       GENERAL SECTIONS
+    ========================== */
+
+    section.content-section {
+      padding: 100px 0;
+    }
+
+    .section-badge {
+      color: #299bd8;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .section-title {
+      font-size: clamp(34px, 5vw, 50px);
+      color: #17324d;
+      margin-top: 12px;
+      letter-spacing: -2px;
+    }
+
+    .section-description {
+      color: #6f899d;
+      max-width: 650px;
+      line-height: 1.8;
+      margin-top: 18px;
+    }
+
+    /* =========================
+       ABOUT DEVELOPER
+    ========================== */
+
+    .about {
+      background: white;
+    }
+
+    .developer-grid {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .developer-photo {
+      width: 100%;
+      min-height: 390px;
+
+      background: #eaf8ff;
+
+      border-radius: 30px;
+
+      overflow: hidden;
+
+      border: 1px solid #d4effd;
+
+      box-shadow: 0 20px 50px rgba(53, 139, 184, 0.12);
+    }
+
+    /*
+      YOUR DEVELOPER IMAGE
+    */
+
+    .developer-img {
+      width: 100%;
+      height: 390px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* VISIT PORTFOLIO BUTTON */
+    .portfolio-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      width: 100%;
+      margin-top: 16px;
+      padding: 15px 20px;
+
+      background: #4bb8ed;
+      color: #ffffff;
+
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+
+      border-radius: 14px;
+
+      box-shadow: 0 10px 25px rgba(75, 184, 237, 0.22);
+
+      transition: 0.3s ease;
+    }
+
+    .portfolio-btn:hover {
+      background: #299bd8;
+      transform: translateY(-2px);
+    }
+
+    .developer-name {
+      font-size: 31px;
+      margin-top: 25px;
+      color: #17324d;
+    }
+
+    .developer-role {
+      color: #40a9dd;
+      font-weight: 700;
+      margin-top: 7px;
+    }
+
+    .developer-bio {
+      color: #668197;
+      line-height: 1.85;
+      margin-top: 20px;
+    }
+
+    .developer-info {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .info-box {
+      background: #f4fbff;
+
+      border: 1px solid #e0f3fc;
+
+      padding: 20px;
+
+      border-radius: 16px;
+    }
+
+    .info-box small {
+      color: #8198a8;
+    }
+
+    .info-box strong {
+      display: block;
+      color: #254861;
+      margin-top: 7px;
+    }
+
+    /* =========================
+       GCASH SECTION
+    ========================== */
+
+    .gcash-section {
+      background: #f5fbff;
+    }
+
+    .gcash-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .gcash-header .section-description {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .gcash-wrapper {
+      max-width: 900px;
+      margin: auto;
+
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+
+      background: white;
+
+      border: 1px solid #dceff9;
+
+      border-radius: 30px;
+
+      overflow: hidden;
+
+      box-shadow: 0 25px 60px rgba(63, 135, 174, 0.1);
+    }
+
+    .gcash-info {
+      padding: 50px;
+    }
+
+    .gcash-logo-text {
+      display: inline-block;
+
+      background: #e5f5ff;
+
+      color: #1697da;
+
+      padding: 8px 14px;
+
+      border-radius: 100px;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      margin-bottom: 22px;
+    }
+
+    .gcash-info h2 {
+      font-size: 38px;
+      color: #17324d;
+      letter-spacing: -1px;
+    }
+
+    .gcash-info p {
+      color: #70899c;
+
+      line-height: 1.7;
+
+      margin-top: 17px;
+    }
+
+    .gcash-number-box {
+      background: #f3faff;
+
+      border: 1px solid #dcf1fc;
+
+      margin-top: 28px;
+
+      padding: 20px;
+
+      border-radius: 16px;
+    }
+
+    .gcash-number-box small {
+      color: #8197a8;
+    }
+
+    .gcash-number {
+      display: block;
+
+      font-size: 24px;
+      font-weight: 800;
+
+      color: #1697da;
+
+      margin-top: 6px;
+    }
+
+    .gcash-note {
+      font-size: 13px;
+      margin-top: 20px;
+    }
+
+    /* =========================
+       GCASH QR IMAGE
+    ========================== */
+
+    .qr-wrapper {
+      background: #eaf8ff;
+
+      padding: 45px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gcash-qr-container {
+      background: white;
+
+      padding: 15px;
+
+      border-radius: 24px;
+
+      border: 1px solid #d7eef9;
+
+      box-shadow: 0 15px 40px rgba(67, 139, 177, 0.12);
+    }
+
+    /*
+      YOUR GCASH QR IMAGE
+    */
+
+    .gcash-qr-img {
+      width: 280px;
+      max-width: 100%;
+      height: auto;
+
+      object-fit: contain;
+
+      display: block;
+
+      border-radius: 16px;
+    }
+
+    /* =========================
+       FOOTER
+    ========================== */
+
+    footer {
+      text-align: center;
+
+      padding: 35px 20px;
+
+      color: #8094a5;
+
+      background: white;
+
+      border-top: 1px solid #e6f1f6;
+
+      font-size: 14px;
+    }
+
+    footer strong {
+      color: #40a9dd;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @media (max-width: 900px) {
+
+      .hero,
+      .developer-grid,
+      .gcash-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        text-align: center;
+        gap: 60px;
+      }
+
+      .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .buttons {
+        justify-content: center;
+      }
+
+      .developer-grid {
+        gap: 40px;
+      }
+
+      .gcash-info {
+        text-align: center;
+      }
+
+      .gcash-number-box {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 650px) {
+
+      nav {
+        height: 70px;
+        position: relative;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+
+        padding: 14px;
+
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid #dceff9;
+        border-radius: 16px;
+
+        box-shadow: 0 18px 45px rgba(41, 155, 216, 0.14);
+        backdrop-filter: blur(12px);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-links a {
+        display: block;
+        width: 100%;
+        padding: 13px 14px;
+        border-radius: 10px;
+      }
+
+      .nav-links a:hover {
+        background: #f1faff;
+      }
+
+      .nav-btn {
+        padding: 13px 14px;
+        text-align: center;
+      }
+
+      .hero {
+        padding-top: 40px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+
+      .support-card {
+        padding: 30px 22px;
+      }
+
+      .circle-bg {
+        width: 300px;
+        height: 300px;
+      }
+
+      section.content-section {
+        padding: 70px 0;
+      }
+
+      .developer-info {
+        grid-template-columns: 1fr;
+      }
+
+      .developer-photo {
+        min-height: 290px;
+      }
+
+      .developer-img {
+        height: 320px;
+      }
+
+      .gcash-info {
+        padding: 35px 25px;
+      }
+
+      .qr-wrapper {
+        padding: 35px 20px;
+      }
+
+      .gcash-qr-img {
+        width: 240px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       NAVBAR
+  ========================== -->
+
+  <div class="container">
+
+    <nav>
+
+      <a href="#" class="logo">
+        About the Developer<span>.</span>
+      </a>
+
+      <div class="nav-links" id="navLinks">
+
+
+         <a href="https://mdti-internlog.github.io/macrologic/intern.html">
+          Home
+        </a>
+
+        <a href="#about">
+          About
+        </a>
+
+        <a href="#gcash">
+          GCash
+        </a>
+
+        <a
+          href="#gcash"
+          target="_blank"
+          class="nav-btn"
+        >
+          Support Me ☕
+        </a>
+
+      </div>
+
+      <!-- MOBILE HAMBURGER BUTTON -->
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="navLinks"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </nav>
+
+  </div>
+
+
+  <!-- =========================
+       HERO
+  ========================== -->
+
+  <div class="container">
+
+    <main class="hero">
+
+      <div>
+
+        <div class="badge">
+          💙 Support an Independent Developer
+        </div>
+
+        <h1>
+          Support the
+          <span>developer</span>
+          behind the projects.
+        </h1>
+
+        <p class="hero-description">
+          If you've enjoyed my projects, websites, applications,
+          or the resources I've created, you can help support my
+          journey as a developer. Your support helps me continue
+          learning, building, and creating better digital experiences.
+        </p>
+
+        <div class="buttons">
+
+          <a
+            href="#gcash"
+            target="_blank"
+            class="primary-btn"
+          >
+            ☕ Buy Me a Coffee
+          </a>
+
+          <a
+            href="#gcash"
+            class="secondary-btn"
+          >
+            Support via GCash →
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- SUPPORT CARD -->
+
+      <div class="support-wrapper">
+
+        <div class="circle-bg"></div>
+
+        <div class="support-card">
+
+          <div class="coffee-icon">
+            ☕
+          </div>
+
+          <h2>
+            Buy Me a Coffee
+          </h2>
+
+          <p>
+            Every coffee supports my development work and helps
+            me continue creating useful websites, applications,
+            and digital projects.
+          </p>
+
+          <a
+            href="#gcash"
+            target="_blank"
+            class="support-btn"
+          >
+            Support My Work →
+          </a>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- =========================
+       ABOUT THE DEVELOPER
+  ========================== -->
+
+  <section
+    class="content-section about"
+    id="about"
+  >
+
+    <div class="container">
+
+      <div class="developer-grid">
+
+
+        <!-- =====================
+             YOUR PHOTO HERE
+
+             Change:
+             images/my-photo.jpg
+
+             Example:
+             images/vilmar.jpg
+        ====================== -->
+
+        <div>
+
+          <div class="developer-photo">
+
+            <img
+              src="formalmaayos.png"
+              alt="Developer Photo"
+              class="developer-img"
+            >
+
+          </div>
+
+          <!--
+            VISIT MY PORTFOLIO
+            Put your portfolio URL inside href="" later.
+            Example: href="https://yourportfolio.com"
+          -->
+          <a
+            href="https://vilmar-dev.vercel.app/"
+            class="portfolio-btn"
+            target="_blank"
+          >
+            Visit My Portfolio ↗
+          </a>
+
+        </div>
+
+
+        <!-- DEVELOPER INFORMATION -->
+
+        <div>
+
+          <span class="section-badge">
+            About the Developer
+          </span>
+
+          <h2 class="section-title">
+            Building ideas into digital experiences.
+          </h2>
+
+          <!-- CHANGE YOUR NAME HERE -->
+
+          <h3 class="developer-name">
+            YOUR NAME
+          </h3>
+
+          <p class="developer-role">
+            Full-Stack Developer • Web Developer
+          </p>
+
+          <p class="developer-bio">
+            Hi! I'm a developer passionate about building clean,
+            functional, and user-friendly digital experiences.
+            I enjoy transforming ideas into websites, applications,
+            and systems that solve real-world problems.
+
+            <br><br>
+
+            I'm continuously learning new technologies and improving
+            my development skills. Support from people who appreciate
+            my work helps me dedicate more time to creating projects,
+            experimenting with new ideas, and sharing useful resources
+            with others.
+          </p>
+
+
+          <div class="developer-info">
+
+            <div class="info-box">
+
+              <small>
+                Role
+              </small>
+
+              <strong>
+                Full-Stack Developer
+              </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+              <small>
+                Specialization
+              </small>
+
+              <strong>
+                Web Development
+              </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+              <small>
+                What I Build
+              </small>
+
+              <strong>
+                Websites & Web Apps
+              </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+              <small>
+                Current Focus
+              </small>
+
+              <strong>
+                Modern Web Technologies
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       GCASH SECTION
+  ========================== -->
+
+  <section
+    class="content-section gcash-section"
+    id="gcash"
+  >
+
+    <div class="container">
+
+      <div class="gcash-header">
+
+        <span class="section-badge">
+          Alternative Support
+        </span>
+
+        <h2 class="section-title">
+          Support through GCash
+        </h2>
+
+        <p class="section-description">
+          You can also directly support my development work through
+          GCash. Scan the QR code or use the GCash number below.
+        </p>
+
+      </div>
+
+
+      <div class="gcash-wrapper">
+
+
+        <!-- GCASH INFORMATION -->
+
+        <div class="gcash-info">
+
+          <span class="gcash-logo-text">
+            GCash
+          </span>
+
+          <h2>
+            Send your support 💙
+          </h2>
+
+          <p>
+            Any amount is deeply appreciated and helps support
+            the time, resources, hosting, tools, and other expenses
+            involved in developing and maintaining my projects.
+          </p>
+
+
+          <!-- =====================
+               YOUR GCASH NUMBER HERE
+          ====================== -->
+
+          <div class="gcash-number-box">
+
+            <small>
+              GCash Number
+            </small>
+
+            <span class="gcash-number">
+              0968-471-3285
+            </span>
+
+          </div>
+
+
+          <p class="gcash-note">
+            Please double-check the GCash account details before
+            completing your transaction.
+          </p>
+
+        </div>
+
+
+        <!-- =====================
+             YOUR GCASH QR IMAGE
+
+             Change:
+             images/gcash-qr.jpg
+
+             Example:
+             images/my-gcash.png
+        ====================== -->
+
+        <div class="qr-wrapper">
+
+          <div class="gcash-qr-container">
+
+            <img
+              src="gshock.jpg"
+              alt="GCash QR Code"
+              class="gcash-qr-img"
+            >
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
+  <footer>
+
+    Made with 💙 by
+    <strong>Mr.Vilmar ammasi</strong>
+
+    <br><br>
+
+    © 2026 All Rights Reserved.
+
+  </footer>
+
+
+  <!-- =========================
+       MOBILE NAVIGATION SCRIPT
+  ========================== -->
+
+  <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    menuToggle.addEventListener("click", function () {
+      const isOpen = navLinks.classList.toggle("active");
+
+      menuToggle.classList.toggle("active", isOpen);
+      menuToggle.setAttribute("aria-expanded", isOpen);
+    });
+
+    /* Close menu after selecting a navigation link */
+    navLinks.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        navLinks.classList.remove("active");
+        menuToggle.classList.remove("active");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    /* Close mobile menu when resizing back to desktop */
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 650) {
+        navLinks.classList.remove("active");
+        menuToggle.classList.remove("active");
+        menuToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  </script>
+
+</body>
+</html>
